@@ -1,0 +1,380 @@
+@extends('master')
+
+@section('content')
+    <!-- Page Heading -->
+    <h1 class="h3 mb-3 text-gray-800">Estoque</h1>
+    <p class="mb-3">Clique no <span class="btn btn-success btn-circle btn-sm"><i class="fas fa-truck"></i></span> e direcione
+        para
+        laboratório desejado.</p>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('listNotas') }}">Listar Notas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Estoque</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="insumo-tab" data-toggle="tab" href="#insumo" role="tab"
+                    aria-controls="insumo" aria-selected="true">Insumo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#equipamento" role="tab"
+                    aria-controls="profile" aria-selected="false">Equipamento</a>
+            </li>
+
+        </ul>
+
+    </div>
+
+
+
+
+    <div class="row">
+
+        <div class="col-xl-12 col-lg-12 card shadow pb-5 pt-3 mb-3">
+
+
+            <div class="tab-content" id="myTabContent">
+
+                {{-- INSUMOS --}}
+                <div class="tab-pane fade show active" id="insumo" role="tabpanel" aria-labelledby="insumo-tab">
+
+                    <table id="exampleData" style="font-size: 0.9rem" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th class="text-center">Selecionar</th>
+                                <th class="text-center">Código</th>
+                                <th class="text-center">Nome</th>
+                                <th class="text-center">Qnt disponível</th>
+                                {{-- <th class="text-center">Qnt enviar</th> --}}
+                                {{-- <th class="text-center">Enviar</th> --}}
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach ($estoqueInsumo as $estoque)
+                                <tr>
+                                    <td class="text-center align-middle">{{ $loop->index + 1 }}</td>
+                                    <td class="text-center align-middle"><input type="checkbox" id="checado"
+                                            name="scales"></td>
+                                    <td class="text-center align-middle">{{ $estoque->codCompraItem }}</td>
+                                    <td class="text-center align-middle">{{ $estoque->nome }}</td>
+                                    <td class="text-center align-middle">{{ $estoque->quantidadeItem }}</td>
+                                    {{-- <td><input id="" type="number" name=""
+                                            class="form-control align-middle" min="1"
+                                            max="{{ $estoque->quantidadeItem }}"></td> --}}
+                                    {{-- <td class="text-center" estoqueId="{{ $estoque->id }}"
+                                        estoqueComprasnota_id="{{ $estoque->comprasnota_id }}"
+                                        estoqueItemCatalogo_id="{{ $estoque->itemCatalogo_id }}"
+                                        estoqueCodCompraItem="{{ $estoque->codCompraItem }}"
+                                        estoqueItemNome="{{ $estoque->nome }}"
+                                        estoqueQuantidadeItem="{{ $estoque->quantidadeItem }}"
+                                        estoqueValorUndItem="{{ $estoque->valorUndItem }}" onclick="receberDados(this)">
+                                        <a href="#" class="btn btn-success btn-circle btn-sm" data-toggle="modal"
+                                            data-target="#exampleModal">
+                                            <i class="fas fa-truck"></i>
+                                        </a>
+                                    </td> --}}
+
+                                </tr>
+                            @endforeach
+
+
+
+
+
+                        </tbody>
+                    </table>
+
+                    <button
+                        onclick="prepararDados()>enviar</button>
+
+                </div>
+
+
+
+                {{-- EQUIPAMENTOS --}}
+                <div class="tab-pane
+                        fade" id="equipamento" role="tabpanel" aria-labelledby="profile-tab">
+
+                        <table id="exampleData2" style="font-size: 0.9rem" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th class="text-center">Código</th>
+                                    <th class="text-center">Nome</th>
+                                    <th class="text-center">Quantidade</th>
+                                    <th class="text-center">Enviar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($estoqueEquipamento as $estoque)
+                                    <tr>
+                                        <td>{{ $loop->index + 1 }}</td>
+                                        <td class="text-center">{{ $estoque->codCompraItem }}</td>
+                                        <td class="text-center">{{ $estoque->nome }}</td>
+                                        <td class="text-center">{{ $estoque->quantidadeItem }}</td>
+                                        <td class="text-center" estoqueId="{{ $estoque->id }}"
+                                            estoqueComprasnota_id="{{ $estoque->comprasnota_id }}"
+                                            estoqueItemCatalogo_id="{{ $estoque->itemCatalogo_id }}"
+                                            estoqueCodCompraItem="{{ $estoque->codCompraItem }}"
+                                            estoqueItemNome="{{ $estoque->nome }}"
+                                            estoqueQuantidadeItem="{{ $estoque->quantidadeItem }}"
+                                            estoqueValorUndItem="{{ $estoque->valorUndItem }}"
+                                            onclick="receberDados(this)">
+                                            <a href="#" class="btn btn-success btn-circle btn-sm" data-toggle="modal"
+                                                data-target="#exampleModal">
+                                                <i class="fas fa-truck"></i>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!----------------------- Modal  -------------------------->
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong style="color: red">Quantidade disponível: <span
+                                id="Modal_EstoqueQuantidadeItem"></span></strong>
+                    </p>
+                    <p><strong>Enviar para:</strong></p>
+                    <form action="{{ route('estoque_envia_laboratorio') }}" method="post">
+                        @csrf
+
+
+                        <input type="text" id="Modal_EstoqueId" value="" name="estoque_Id" hidden>
+                        <input type="text" id="Modal_EstoqueComprasnota_id" value=""
+                            name="estoque_comprasnota_id" hidden>
+                        <input type="text" id="Modal_EstoqueItemCatalogo_id" value=""
+                            name="estoque_itemCatalogo_id" hidden>
+                        <input type="text" id="Modal_EstoqueCodCompraItem" value=""
+                            name="estoque_codCompraItem" hidden>
+                        <input type="text" id="Modal_EstoqueQuantidadeItemInput" value=""
+                            name="estoque_quantidadeItem" hidden>
+                        <input type="text" id="Modal_EstoqueValorUndItem" value="" name="estoque_valorUndItem"
+                            hidden>
+
+                        <div class="form-group">
+                            <label>IEMA Pleno:</label>
+                            <select id="unidade_id" class="form-control" name="estoque_unidade_id"
+                                onchange="unidade_Selecionado()" required>
+                                <option></option>
+                                @foreach ($unidades as $unidade)
+                                    <option value="{{ $unidade->id }}">{{ $unidade->nome }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label>Selecione o Laboratório:</label>
+                            <select class="form-control" id="laboratorioId" name="estoque_laboratorio_id" required>
+                                <option></option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label>Informe a quantidade:</label>
+                                <div class="form-group pl-0  border-bottom">
+                                    <input id="Modal_EstoqueQuantidadeItem_Max" type="number"
+                                        name="estoque_quantidadeSolicitada" class="form-control" min="1"
+                                        max="" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-7">
+                                <label class="">Data de envio:</label>
+                                <div class="form-group pl-0 border-bottom">
+                                    <input type="date" id="Modal_DataEnvioItem" name="estoque_dataEnvioItem"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+
+                        <div class="float-right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                onclick="limpandoCampos()">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {{-- FIM MODAL --}}
+@endsection
+
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $("#exampleData").DataTable({
+                language: {
+                    decimal: "",
+                    emptyTable: "Não foram encontrados registros",
+                    info: "Apresentar _START_ de _END_ para _TOTAL_ registros",
+                    infoEmpty: "Apresentar 0 de 0 para 0 registros",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    thousands: ",",
+                    lengthMenu: "Apresentar _MENU_ registros",
+                    loadingRecords: "Loading...",
+                    processing: "",
+                    search: "Pesquisar:",
+                    zeroRecords: "No matching records found",
+                    paginate: {
+                        first: "First",
+                        last: "Last",
+                        next: "Próximo",
+                        previous: "Anterior",
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending",
+                    },
+                },
+            });
+        });
+
+
+        $(document).ready(function() {
+            $("#exampleData2").DataTable({
+                language: {
+                    decimal: "",
+                    emptyTable: "Não foram encontrados registros",
+                    info: "Apresentar _START_ de _END_ para _TOTAL_ registros",
+                    infoEmpty: "Apresentar 0 de 0 para 0 registros",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoPostFix: "",
+                    thousands: ",",
+                    lengthMenu: "Apresentar _MENU_ registros",
+                    loadingRecords: "Loading...",
+                    processing: "",
+                    search: "Pesquisar:",
+                    zeroRecords: "No matching records found",
+                    paginate: {
+                        first: "First",
+                        last: "Last",
+                        next: "Próximo",
+                        previous: "Anterior",
+                    },
+                    aria: {
+                        sortAscending: ": activate to sort column ascending",
+                        sortDescending: ": activate to sort column descending",
+                    },
+                },
+            });
+        });
+    </script>
+
+    <script>
+        function receberDados(componente) {
+
+
+            //preenchendo
+            var estoqueId = componente.getAttribute('estoqueId');
+            var estoqueComprasnota_id = componente.getAttribute('estoqueComprasnota_id');
+            var estoqueItemCatalogo_id = componente.getAttribute('estoqueItemCatalogo_id');
+            var estoqueCodCompraItem = componente.getAttribute('estoqueCodCompraItem');
+            var estoqueItemNome = componente.getAttribute('estoqueItemNome');
+            var estoqueQuantidadeItem = componente.getAttribute('estoqueQuantidadeItem');
+            var estoqueValorUndItem = componente.getAttribute('estoqueValorUndItem');
+
+            document.querySelector("#exampleModalLabel").innerHTML = estoqueItemNome;
+            document.querySelector("#Modal_EstoqueId").value = estoqueId;
+            document.querySelector("#Modal_EstoqueComprasnota_id").value = estoqueComprasnota_id;
+            document.querySelector("#Modal_EstoqueItemCatalogo_id").value = estoqueItemCatalogo_id;
+            document.querySelector("#Modal_EstoqueCodCompraItem").value = estoqueCodCompraItem;
+            document.querySelector("#Modal_EstoqueQuantidadeItem").innerHTML = estoqueQuantidadeItem;
+            document.querySelector("#Modal_EstoqueQuantidadeItemInput").value = estoqueQuantidadeItem;
+            document.querySelector("#Modal_EstoqueQuantidadeItem_Max").max = estoqueQuantidadeItem;
+            document.querySelector("#Modal_EstoqueValorUndItem").value = estoqueValorUndItem;
+
+        }
+
+        function limpandoCampos() {
+
+            document.querySelector("#Modal_EstoqueQuantidadeItem_Max").value = '';
+            document.querySelector("#laboratorioId").innerHTML = '';
+            document.querySelector("#Modal_DataEnvioItem").value = '';
+
+        }
+    </script>
+
+    <script>
+        function unidade_Selecionado() {
+
+            let unidade_id = document.getElementById('unidade_id').value;
+            //console.log(unidade_id);
+            requisitar(unidade_id);
+        }
+
+        async function requisitar(unidade_id) {
+            let laboratorios = document.getElementById('laboratorioId');
+
+            let url = "{{ route('estoque_list_laboratorios', ['id' => ':id']) }}";
+            url = url.replace(":id", unidade_id);
+
+            let selectCriados = '';
+
+            await fetch(url)
+                .then(response => response.json())
+                .then(resultado => {
+
+                    resultado.map((indice) => {
+                        selectCriados += "<option value=" + indice.id + ">" + indice.prefixo + "</option>";
+                    })
+                    laboratorios.innerHTML = selectCriados;
+                })
+
+        }
+    </script>
+
+    @if (session()->exists('envio-success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Item enviado!',
+                timer: 1900
+            })
+        </script>
+    @endif
+@endsection
